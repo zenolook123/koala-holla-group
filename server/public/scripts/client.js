@@ -57,3 +57,25 @@ function saveKoala( newKoala ){
  
 }
 
+function renderKoalas(koalas) {
+  $('#viewKoalas').empty();
+
+  for(let i = 0; i < koalas.length; i += 1) {
+    let koala = koalas[i];
+    let newRow = $(`
+    <tr data-id = "$1">
+    <td>${koala.name}</td>
+    <td>${koala.age}</td>
+    <td>${koala.gender}</td>
+    <td>${koala.transfer}</td>
+    <td>${koala.note}</td>
+    <tr><button class = "transfer-button">Ready to transfer!</button></tr>
+    <tr><button class = "delete-button">Delete</button></tr>
+    </tr>
+
+    `);
+    
+    $('#viewKoalas').append(newRow);
+  }
+}
+

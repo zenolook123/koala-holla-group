@@ -24,14 +24,14 @@ koalaRouter.post('/', (req, res) => {
     console.log("Inside POST /, req.body:", koala);
 
     let name = req.body.name;
-    let age = req.body.name;
-    let gender = req.body.name;
-    let readyForTransfer = req.body.name;
-    let notes = req.body.name;
+    let age = req.body.age;
+    let gender = req.body.gender;
+    let transfer = req.body.transfer;
+    let note = req.body.note;
 
     const query = `INSERT INTO "koalas" ("name", "age", "gender", "transfer", "note") VALUES ($1, $2, $3, $4, $5);`
 
-    pool.query(query, [name, age, gender, readyForTransfer, notes])
+    pool.query(query, [name, age, gender, transfer, note])
     .then((result) => {
         console.log("Koala inserted into table 'koalas' in 'koala_base' database.");
         res.sendStatus(201);
@@ -45,10 +45,9 @@ koalaRouter.post('/', (req, res) => {
 // PUT
 koalaRouter.put('/:id', (req, res) => {
     const idToUpdate = req.params.id
-    let query = `UPDATE "koalas" SET "transfer" = 'true'
-    WHERE id = $1`;
+    let query = `UPDATE "koalas" SET "transfer" = NOT "transfer"
+    WHERE id = $1;`;
     pool.query(query, [idToUpdate])
-
 .then((results) => {
     console.log("success in the router.put")
     res.sendStatus(200)

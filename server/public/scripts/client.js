@@ -1,69 +1,92 @@
-console.log( 'js' );
+console.log("js");
 
-$( document ).ready( function(){
-  console.log( 'JQ' );
+$(document).ready(function () {
+  console.log("JQ");
   // Establish Click Listeners
-  setupClickListeners()
   // load existing koalas on page load
-  getKoalas();
-
+  $("#addButton").on("click", postKoala)
+  $("#viewKoalas").on("click",'.transfer-button', koalaTransfer)
+  // $("#viewKoalas").on("click",'#delete-button')
+  getKoalas()
 }); // end doc ready
 
-function setupClickListeners() {
-  $( '#addButton' ).on( 'click', function(){
-    console.log( 'in addButton on click' );
-    // get user input and put in an object
-    // NOT WORKING YET :(
-    // using a test object
-    let koalaToSend = {
-      name: 'testName',
-      age: 'testName',
-      gender: 'testName',
-      readyForTransfer: 'testName',
-      notes: 'testName',
-    };
-    // call saveKoala with the new object
-    saveKoala( koalaToSend );
-  }); 
-}
-
-function koalaTransfer(){
+function koalaTransfer() {
+  let idToUpdate = ($(this).parent().parent().data('id'))
   $.ajax({
     type: "PUT",
-    url: "/koalas"
-  }).then((response) => {
-    console.log("Response is", response)
-  }).catch((error)=> {
-    console.log("Error in koala transfer", error)
+    url: `/koalas/${idToUpdate}`,
   })
+    .then((response) => {
+      console.log("Koala ready to transfer is set to true", response);
+      getKoalas()
+    })
+    .catch((error) => {
+      console.log("Error in koala transfer", error);
+    });
 }
- 
-function getKoalas(){
-  console.log( 'in getKoalas' );
+
+function getKoalas() {
+  console.log("in getKoalas");
   // ajax call to server to get koalas
   $.ajax({
     type: "GET",
-    url: "/koalas"
-  }).then((response) => {
-    renderKoalas(response);
-  }).catch((error) => {
-    console.log("error in get clien", error)
-  });
+    url: "/koalas",
+  })
+    .then((response) => {
+      renderKoalas(response);
+    })
+    .catch((error) => {
+      console.log("error in get client", error);
+    });
 } // end getKoalas
 
-function saveKoala( newKoala ){
-  console.log( 'in saveKoala', newKoala );
-  // ajax call to server to get koalas
- 
+// POST
+function postKoala() {
+  let KoalaObject = {
+    name: $("#nameIn").val(),
+    age: $("#ageIn").val(),
+    gender: $("#genderIn").val(),
+    transfer: $("#readyForTransferIn").val(),
+    note: $("#notesIn").val(),
+  };
+  $.ajax({
+    method: "POST",
+    url: "/koalas",
+    data: KoalaObject,
+  }).then((response) => {
+    console.log("Response from server.", response);
+      $("#nameIn").val(""),
+      $("#ageIn").val(""),
+      $("#genderIn").val(""),
+      $("#readyForTransferIn").val("");
+      $('#notesIn').val("");
+    getKoalas();
+  }).catch((error) => {
+    console.log("Error in POST", error);
+      alert("Unable to add koala at this time.");
+  })
 }
 
-function renderKoalas(koalas) {
-  $('#viewKoalas').empty();
+function killKoala(){
+  let koalaID = ($(this).parent().parent().data('id'))
 
-  for(let i = 0; i < koalas.length; i += 1) {
+  $.ajax({
+    method:'delete',
+    url: `/koalas/${koalaID}`
+  }).then((response) => {
+    console.log("deleted koala", response)
+    renderKoalas()
+  }).catch((error) => {
+    console.log("error in delete ajax", error)
+  })
+}
+function renderKoalas(koalas) {
+  $("#viewKoalas").empty();
+
+  for (let i = 0; i < koalas.length; i += 1) {
     let koala = koalas[i];
     let newRow = $(`
-    <tr data-id = "$1">
+    <tr data-id = ${koala.id}>
     <td>${koala.name}</td>
     <td>${koala.age}</td>
     <td>${koala.gender}</td>
@@ -74,8 +97,7 @@ function renderKoalas(koalas) {
     </tr>
 
     `);
-    
-    $('#viewKoalas').append(newRow);
+
+    $("#viewKoalas").append(newRow);
   }
 }
-

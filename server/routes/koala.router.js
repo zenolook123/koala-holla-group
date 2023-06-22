@@ -45,10 +45,9 @@ koalaRouter.post('/', (req, res) => {
 // PUT
 koalaRouter.put('/:id', (req, res) => {
     const idToUpdate = req.params.id
-    let query = `UPDATE "koalas" SET "transfer" = 'true'
-    WHERE id = $1`;
+    let query = `UPDATE "koalas" SET "transfer" = NOT "transfer"
+    WHERE id = $1;`;
     pool.query(query, [idToUpdate])
-
 .then((results) => {
     console.log("success in the router.put")
     res.sendStatus(200)

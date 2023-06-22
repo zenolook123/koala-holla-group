@@ -61,7 +61,7 @@ function postKoala() {
     age: $("#ageIn").val(),
     gender: $("#genderIn").val(),
     transfer: $("#readyForTransferIn").val(),
-    note: $("#noteIn").val,
+    note: $("#noteIn").val(),
   };
   $.ajax({
     method: "POST",

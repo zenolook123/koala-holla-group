@@ -25,6 +25,7 @@ function koalaTransfer() {
     });
 }
 
+// GET request to put all koalas from database onto DOM
 function getKoalas() {
   console.log("in getKoalas");
   // ajax call to server to get koalas
@@ -40,7 +41,7 @@ function getKoalas() {
     });
 } // end getKoalas
 
-// POST
+// POST request to add a koala to database
 function postKoala() {
   let KoalaObject = {
     name: $("#nameIn").val(),
@@ -67,6 +68,7 @@ function postKoala() {
   })
 }
 
+// DELETE method to 'remove' koala
 function killKoala(){
   let koalaID = ($(this).parent().parent().data('id'))
 
@@ -80,6 +82,8 @@ function killKoala(){
     console.log("error in delete ajax", error)
   })
 }
+
+// Function to render koala database to DOM
 function renderKoalas(koalas) {
   $("#viewKoalas").empty();
 

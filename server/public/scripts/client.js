@@ -25,6 +25,7 @@ function koalaTransfer() {
     });
 }
 
+// Function to put all koalas from database onto DOM
 function getKoalas() {
   console.log("in getKoalas");
   // ajax call to server to get koalas

@@ -6,7 +6,7 @@ $(document).ready(function () {
   // load existing koalas on page load
   $("#addButton").on("click", postKoala)
   $("#viewKoalas").on("click",'.transfer-button', koalaTransfer)
-  // $("#viewKoalas").on("click",'#delete-button')
+  $("#viewKoalas").on("click",'.delete-button', killKoala)
   getKoalas()
 }); // end doc ready
 
@@ -77,7 +77,7 @@ function killKoala(){
     url: `/koalas/${koalaID}`
   }).then((response) => {
     console.log("deleted koala", response)
-    renderKoalas()
+    getKoalas()
   }).catch((error) => {
     console.log("error in delete ajax", error)
   })

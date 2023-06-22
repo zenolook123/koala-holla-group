@@ -59,5 +59,19 @@ koalaRouter.put('/:id', (req, res) => {
 });
 
 // DELETE
+koalaRouter.delete('/:id', (req, res) => {
+    let idToDelete = req.params.id;
+
+    let query = `DELETE FROM "koalas" WHERE "id" = $1`
+
+    pool.query(query, [idToDelete])
+    .then((results) => {
+        console.log("Koala EXTERMINATED.");
+        res.sendStatus(200);
+    }).catch((error) => {
+        console.log("Error making database query:", error);
+        res.sendStatus(500);
+    })
+});
 
 module.exports = koalaRouter;

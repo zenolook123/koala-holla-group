@@ -3,7 +3,7 @@ const koalaRouter = express.Router();
 
 const pool = require('../modules/pool')
 
-// DB CONNECTION
+//ORDER CONNECTION
 
 // GET
 koalaRouter.get('/', (req, res) => {
@@ -71,6 +71,52 @@ koalaRouter.delete('/:id', (req, res) => {
     }).catch((error) => {
         console.log("Error making database query:", error);
         res.sendStatus(500);
+    })
+});
+
+
+koalaRouter.get('/orderName', (req, res) => {
+
+    let queryText = 'SELECT * FROM "koalas" ORDER BY "name";'
+    pool.query(queryText).then(results => {
+        res.send(results.rows)
+    })
+    .catch(error => {
+        console.log('error getting koala data', error)
+        res.sendStatus(500)
+    })
+});
+koalaRouter.get('/orderAge', (req, res) => {
+
+    let queryText = 'SELECT * FROM "koalas" ORDER BY "age";'
+    pool.query(queryText).then(results => {
+        res.send(results.rows)
+    })
+    .catch(error => {
+        console.log('error getting koala data', error)
+        res.sendStatus(500)
+    })
+});
+koalaRouter.get('/orderTransfer', (req, res) => {
+
+    let queryText = 'SELECT * FROM "koalas" ORDER BY "transfer";'
+    pool.query(queryText).then(results => {
+        res.send(results.rows)
+    })
+    .catch(error => {
+        console.log('error getting koala data', error)
+        res.sendStatus(500)
+    })
+});
+koalaRouter.get('/orderGender', (req, res) => {
+
+    let queryText = 'SELECT * FROM "koalas" ORDER BY "gender";'
+    pool.query(queryText).then(results => {
+        res.send(results.rows)
+    })
+    .catch(error => {
+        console.log('error getting koala data', error)
+        res.sendStatus(500)
     })
 });
 

@@ -75,6 +75,31 @@ function postKoala() {
       })
       .then((result) => {
         if (result.isConfirmed) {
+          let KoalaObject = {
+            name: $("#nameIn").val(),
+            age: $("#ageIn").val(),
+            gender: $("#genderIn").val(),
+            transfer: $("#readyForTransferIn").val(),
+            note: $("#notesIn").val(),
+          };
+          $.ajax({
+            method: "POST",
+            url: "/koalas",
+            data: KoalaObject,
+          })
+            .then((response) => {
+              console.log("Response from server.", response);
+              $("#nameIn").val(""),
+                $("#ageIn").val(""),
+                $("#genderIn").val(""),
+                $("#readyForTransferIn").val("");
+              $("#notesIn").val("");
+              getKoalas();
+            })
+            .catch((error) => {
+              console.log("Error in POST", error);
+              alert("Unable to add koala at this time.");
+            });
           Swal.fire("Confirmed!", "You agreed to help the koalas", "success");
         } else {
           console.log("action cancelled");
@@ -82,32 +107,7 @@ function postKoala() {
       });
   }); 
 
-
-  let KoalaObject = {
-    name: $("#nameIn").val(),
-    age: $("#ageIn").val(),
-    gender: $("#genderIn").val(),
-    transfer: $("#readyForTransferIn").val(),
-    note: $("#notesIn").val(),
-  };
-  $.ajax({
-    method: "POST",
-    url: "/koalas",
-    data: KoalaObject,
-  })
-    .then((response) => {
-      console.log("Response from server.", response);
-      $("#nameIn").val(""),
-        $("#ageIn").val(""),
-        $("#genderIn").val(""),
-        $("#readyForTransferIn").val("");
-      $("#notesIn").val("");
-      getKoalas();
-    })
-    .catch((error) => {
-      console.log("Error in POST", error);
-      alert("Unable to add koala at this time.");
-    });
+  
 } // end postKoala
 
 // DELETE method to 'remove' koala

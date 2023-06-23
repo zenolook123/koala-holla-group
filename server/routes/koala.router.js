@@ -74,7 +74,8 @@ koalaRouter.delete('/:id', (req, res) => {
     })
 });
 
-
+// Routes for order by button to order koalas depending on what order you want
+// Order by name
 koalaRouter.get('/orderName', (req, res) => {
 
     let queryText = 'SELECT * FROM "koalas" ORDER BY "name";'
@@ -86,6 +87,8 @@ koalaRouter.get('/orderName', (req, res) => {
         res.sendStatus(500)
     })
 });
+
+// Order by age
 koalaRouter.get('/orderAge', (req, res) => {
 
     let queryText = 'SELECT * FROM "koalas" ORDER BY "age";'
@@ -97,6 +100,8 @@ koalaRouter.get('/orderAge', (req, res) => {
         res.sendStatus(500)
     })
 });
+
+// Order by transfer
 koalaRouter.get('/orderTransfer', (req, res) => {
 
     let queryText = 'SELECT * FROM "koalas" ORDER BY "transfer";'
@@ -108,6 +113,8 @@ koalaRouter.get('/orderTransfer', (req, res) => {
         res.sendStatus(500)
     })
 });
+
+// Order by gender
 koalaRouter.get('/orderGender', (req, res) => {
 
     let queryText = 'SELECT * FROM "koalas" ORDER BY "gender";'

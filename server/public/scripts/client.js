@@ -11,6 +11,8 @@ $(document).ready(function () {
   getKoalas();
 }); // end doc ready
 
+// Order By
+// Function to order koalas in a certain way
 function orderKoala() {
   $.ajax({
     type: "GET",
@@ -22,9 +24,9 @@ function orderKoala() {
     .catch((error) => {
       console.log("error in get client", error);
     });
-}
+} // end orderKoala
 
-
+// PUT request for Koalas
 function koalaTransfer() {
   let idToUpdate = $(this).parent().parent().data("id");
   $.ajax({
@@ -38,7 +40,7 @@ function koalaTransfer() {
     .catch((error) => {
       console.log("Error in koala transfer", error);
     });
-}
+} // koalaTransfer
 
 // GET request to put all koalas from database onto DOM
 function getKoalas() {
@@ -78,7 +80,7 @@ function postKoala() {
           console.log("action cancelled");
         }
       });
-  });
+  }); 
 
 
   let KoalaObject = {
@@ -106,9 +108,10 @@ function postKoala() {
       console.log("Error in POST", error);
       alert("Unable to add koala at this time.");
     });
-}
+} // end postKoala
 
 // DELETE method to 'remove' koala
+// Using sweet alert
 function killKoala() {
   let koalaID = $(this).parent().parent().data("id");
 
@@ -148,7 +151,7 @@ function koalaDelete(){
       console.log("error in delete ajax", error);
     });
 }
-}
+} // end killKoala
 
 function renderKoalas(koalas) {
   $("#viewKoalas").empty();
@@ -170,4 +173,4 @@ function renderKoalas(koalas) {
 
     $("#viewKoalas").append(newRow);
   }
-}
+} // end renderKoalas

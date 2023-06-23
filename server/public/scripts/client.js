@@ -153,3 +153,5 @@ function renderKoalas(koalas) {
     $("#viewKoalas").append(newRow);
   }
 }
+
+

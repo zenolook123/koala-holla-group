@@ -4,21 +4,36 @@ $(document).ready(function () {
   console.log("JQ");
   // Establish Click Listeners
   // load existing koalas on page load
-  $("#addButton").on("click", postKoala)
-  $("#viewKoalas").on("click",'.transfer-button', koalaTransfer)
-  $("#viewKoalas").on("click",'.delete-button', killKoala)
-  getKoalas()
+  $("#addButton").on("click", postKoala);
+  $("#viewKoalas").on("click", ".transfer-button", koalaTransfer);
+  $("#viewKoalas").on("click", ".delete-button", killKoala);
+  $('.dropdown-item').on("click", orderKoala)
+  getKoalas();
 }); // end doc ready
 
+function orderKoala() {
+  $.ajax({
+    type: "GET",
+    url: `/koalas/order${$(this).attr('id')}`,
+  })
+    .then((response) => {
+      renderKoalas(response);
+    })
+    .catch((error) => {
+      console.log("error in get client", error);
+    });
+}
+
+
 function koalaTransfer() {
-  let idToUpdate = ($(this).parent().parent().data('id'))
+  let idToUpdate = $(this).parent().parent().data("id");
   $.ajax({
     type: "PUT",
     url: `/koalas/${idToUpdate}`,
   })
     .then((response) => {
       console.log("Koala ready to transfer is set to true", response);
-      getKoalas()
+      getKoalas();
     })
     .catch((error) => {
       console.log("Error in koala transfer", error);
@@ -43,6 +58,29 @@ function getKoalas() {
 
 // POST request to add a koala to database
 function postKoala() {
+  // need to change add button event listener/statement that when you click cancel button warning
+  // the action of adding does not happen. right now adding will happen regardless if cancel button is clicked. 
+  $.getScript("https://cdn.jsdelivr.net/npm/sweetalert2@11", function () {
+    swal
+      .fire({
+        title: "Do you want to add the koala to the conservatory?",
+        text: "Yes, I want to save the koalas!",
+        icon: "success",
+        showCancelButton: true,
+        confirmButtonColor: "#C64EB2",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire("Confirmed!", "You agreed to help the koalas", "success");
+        } else {
+          console.log("action cancelled");
+        }
+      });
+  });
+
+
   let KoalaObject = {
     name: $("#nameIn").val(),
     age: $("#ageIn").val(),
@@ -54,36 +92,64 @@ function postKoala() {
     method: "POST",
     url: "/koalas",
     data: KoalaObject,
-  }).then((response) => {
-    console.log("Response from server.", response);
-      $("#nameIn").val(""),
-      $("#ageIn").val(""),
-      $("#genderIn").val(""),
-      $("#readyForTransferIn").val("");
-      $('#notesIn').val("");
-    getKoalas();
-  }).catch((error) => {
-    console.log("Error in POST", error);
-      alert("Unable to add koala at this time.");
   })
+    .then((response) => {
+      console.log("Response from server.", response);
+      $("#nameIn").val(""),
+        $("#ageIn").val(""),
+        $("#genderIn").val(""),
+        $("#readyForTransferIn").val("");
+      $("#notesIn").val("");
+      getKoalas();
+    })
+    .catch((error) => {
+      console.log("Error in POST", error);
+      alert("Unable to add koala at this time.");
+    });
 }
 
 // DELETE method to 'remove' koala
-function killKoala(){
-  let koalaID = ($(this).parent().parent().data('id'))
+function killKoala() {
+  let koalaID = $(this).parent().parent().data("id");
 
+  // need to change delete button event listener/statement that when you click cancel button warning
+  // the action of removing does not happen. right now delete will happen when delete button is clicked
+  $.getScript("https://cdn.jsdelivr.net/npm/sweetalert2@11", function () {
+    swal
+      .fire({
+        title: "Are you sure you want to EXTERMINATE the koala?",
+        text: "You will not be able to reverse this action!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Yes, EXTERMINATE the koala!",
+        cancelButtonText: "No, cancel PLEASE!",
+      })
+      .then((result) => {
+        if (result.isConfirmed) {
+          koalaDelete()
+          swal.fire("Succeed!", "Your poor koala has been EXTERMINATE 🥲");
+        } else {
+          swal.fire("Cancelled", "Your koala is safe 😀");
+        }
+      });
+  });
+
+function koalaDelete(){
   $.ajax({
-    method:'delete',
-    url: `/koalas/${koalaID}`
-  }).then((response) => {
-    console.log("deleted koala", response)
-    getKoalas()
-  }).catch((error) => {
-    console.log("error in delete ajax", error)
+    method: "delete",
+    url: `/koalas/${koalaID}`,
   })
+    .then((response) => {
+      console.log("deleted koala", response);
+      getKoalas();
+    })
+    .catch((error) => {
+      console.log("error in delete ajax", error);
+    });
+}
 }
 
-// Function to render koala database to DOM
 function renderKoalas(koalas) {
   $("#viewKoalas").empty();
 

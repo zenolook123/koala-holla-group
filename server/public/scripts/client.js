@@ -1,3 +1,5 @@
+const { default: swal } = require("sweetalert");
+
 console.log("js");
 
 $(document).ready(function () {
@@ -58,6 +60,13 @@ function getKoalas() {
 
 // POST request to add a koala to database
 function postKoala() {
+  let KoalaObject = {
+    name: $("#nameIn").val(),
+    age: $("#ageIn").val(),
+    gender: $("#genderIn").val(),
+    transfer: $("#readyForTransferIn").val(),
+    note: $("#notesIn").val(),
+  };
   // need to change add button event listener/statement that when you click cancel button warning
   // the action of adding does not happen. right now adding will happen regardless if cancel button is clicked. 
   $.getScript("https://cdn.jsdelivr.net/npm/sweetalert2@11", function () {
@@ -70,24 +79,18 @@ function postKoala() {
         confirmButtonColor: "#C64EB2",
         cancelButtonColor: "#d33",
         confirmButtonText: "Yes",
+        cancelButtonText: "No, cancel PLEASE!",
       })
       .then((result) => {
         if (result.isConfirmed) {
+      
           Swal.fire("Confirmed!", "You agreed to help the koalas", "success");
         } else {
-          console.log("action cancelled");
+          swal.fire("action cancelled");
         }
       });
   });
 
-
-  let KoalaObject = {
-    name: $("#nameIn").val(),
-    age: $("#ageIn").val(),
-    gender: $("#genderIn").val(),
-    transfer: $("#readyForTransferIn").val(),
-    note: $("#notesIn").val(),
-  };
   $.ajax({
     method: "POST",
     url: "/koalas",

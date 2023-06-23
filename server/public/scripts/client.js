@@ -7,8 +7,23 @@ $(document).ready(function () {
   $("#addButton").on("click", postKoala);
   $("#viewKoalas").on("click", ".transfer-button", koalaTransfer);
   $("#viewKoalas").on("click", ".delete-button", killKoala);
+  $('.dropdown-item').on("click", orderKoala)
   getKoalas();
 }); // end doc ready
+
+function orderKoala() {
+  $.ajax({
+    type: "GET",
+    url: `/koalas/order${$(this).attr('id')}`,
+  })
+    .then((response) => {
+      renderKoalas(response);
+    })
+    .catch((error) => {
+      console.log("error in get client", error);
+    });
+}
+
 
 function koalaTransfer() {
   let idToUpdate = $(this).parent().parent().data("id");
@@ -112,6 +127,7 @@ function killKoala() {
       })
       .then((result) => {
         if (result.isConfirmed) {
+          koalaDelete()
           swal.fire("Succeed!", "Your poor koala has been EXTERMINATE 🥲");
         } else {
           swal.fire("Cancelled", "Your koala is safe 😀");
@@ -119,6 +135,7 @@ function killKoala() {
       });
   });
 
+function koalaDelete(){
   $.ajax({
     method: "delete",
     url: `/koalas/${koalaID}`,
@@ -130,6 +147,7 @@ function killKoala() {
     .catch((error) => {
       console.log("error in delete ajax", error);
     });
+}
 }
 
 function renderKoalas(koalas) {

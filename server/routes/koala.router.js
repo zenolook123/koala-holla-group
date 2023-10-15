@@ -1,6 +1,5 @@
 const express = require('express');
 const koalaRouter = express.Router();
-
 const pool = require('../modules/pool')
 
 //ORDER CONNECTION
@@ -61,9 +60,7 @@ koalaRouter.put('/:id', (req, res) => {
 // DELETE
 koalaRouter.delete('/:id', (req, res) => {
     let idToDelete = req.params.id;
-
     let query = `DELETE FROM "koalas" WHERE "id" = $1`
-
     pool.query(query, [idToDelete])
     .then((results) => {
         console.log("Koala EXTERMINATED.");
